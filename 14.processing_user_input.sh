@@ -13,7 +13,7 @@
 ### 14.1.1 读取参数
 :<<!
 factorial=1
-for (( number = 1; number <= $1; number++  ))
+for(( number = 1; number <= $1; number++ ))
 do
     factorial=$[ $factorial * $number  ]
 done
@@ -26,7 +26,7 @@ echo The total value is $total
 
 echo Hello $1, glod to meet you
 
-total=$[ ${10} * ${11} ]
+total=$[ ${10}*${11} ]
 echo The tenth parameter is ${10}
 echo The eleventh parameter is ${11}
 echo The total value is $total
@@ -177,5 +177,42 @@ done
 getopt optstring parameters
 !
 
-getopt ab::cd -a -b test1 -cd test12 test3
+##getopt ab::cd -a -b test1 -cd test12 test3
 
+## set -- $(getopt -q ab:cd "$@")
+set -- $(getopt -q ab:cd "$@")
+
+echo
+while [ -n "$1" ]
+do
+    case "$1" in
+        -a) echo "Found the -a option ";;
+        -b) param="$2"
+            echo "Found the -b option, with parameter value $parama"
+            shift;;
+        -c) echo "Found the -c option";;
+        --)shift
+            break;;
+        *) echo "$1 is not  an option";;
+    esac
+    shift;;
+done
+count=1
+for param in $@
+do
+    echo "parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+
+## getopts
+
+echo
+while getopts :ab:c opt 
+do
+    case "$opt" in
+        a) echo "Found the -a option" ;;
+        b) echo "Found the -b option" ;;
+        c) echo "Found the -c option" ;;
+        *) echo "Unknow option: $opt";;
+    esac
+done 
